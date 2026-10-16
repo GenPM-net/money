@@ -23,6 +23,23 @@ modules never use floats. Parsing from decimal strings, safe arithmetic that ref
 percentages, lossless allocation (splitting a discount across lines), charm prices (`.99`, never below the input; `…9` in zero-decimal currencies), formatting with `Intl`
 and conversion with a rates table. Pure functions: no tables, no network.
 
+## Setup
+
+After `genpm add`, follow these steps (your AI agent finds the same steps in `src/lib/money/AGENTS.md` and can do them for you):
+
+1. Nothing to configure. Store money in two columns: `amount integer` (minor units) and `currency text`.
+2. User input: `parseMoney('19,99', 'EUR')` (never `Number(input) * 100`).
+3. Display: `format(price, locale)`; APIs/JSON-LD: `toDecimalString(price)`.
+4. Split amounts: `allocate(discount, lines.map((l) => l.subtotal.amount))`.
+5. Verify: `add(money(1, 'EUR'), money(1, 'USD'))` throws.
+
+## What's inside
+
+Paths are relative to `src/lib/money`.
+
+- `index.ts` — public API: `money`, `parseMoney`, `add`, `sub`, `sum`, `multiply`, `percent`, `allocate`, `charmPrice`, `format`, `toDecimalString`, `convert`, `currencyDecimals`.
+- `money.ts` — implementation. The `Money` type comes from @core/contracts.
+
 ## At a glance
 
 - **GenPM dependencies** (installed with it): [@core/contracts](https://genpm.net/p/@core/contracts)
